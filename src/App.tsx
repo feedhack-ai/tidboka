@@ -139,6 +139,28 @@ const STATUS_LABEL: Record<Status, string> = {
   "no-show": "No-show",
 };
 
+// Colour per service, used by appointment blocks and the legend above the calendar.
+const SERVICE_COLOR: Record<string, { block: string; swatch: string }> = {
+  sv1: { block: "border-violet-300 bg-violet-100 hover:border-violet-500", swatch: "border-violet-300 bg-violet-100" },
+  sv2: { block: "border-sky-300 bg-sky-100 hover:border-sky-500", swatch: "border-sky-300 bg-sky-100" },
+  sv3: { block: "border-emerald-300 bg-emerald-100 hover:border-emerald-500", swatch: "border-emerald-300 bg-emerald-100" },
+  sv4: { block: "border-amber-300 bg-amber-100 hover:border-amber-500", swatch: "border-amber-300 bg-amber-100" },
+  sv5: { block: "border-rose-300 bg-rose-100 hover:border-rose-500", swatch: "border-rose-300 bg-rose-100" },
+};
+
+function ServiceLegend() {
+  return (
+    <div id="service-legend" className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-6 pb-3 text-[12px] text-stone-600">
+      {SERVICES.map((s) => (
+        <span key={s.id} data-service={s.name} className="flex items-center gap-1.5">
+          <span className={cn("h-3 w-3 rounded-sm border", SERVICE_COLOR[s.id]?.swatch ?? "border-stone-300 bg-stone-100")} />
+          {s.name}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function CalendarPage() {
   const [day, setDay] = useState(START_DAY);
   const [selected, setSelected] = useState<Appointment | null>(null);
@@ -167,6 +189,7 @@ function CalendarPage() {
           </button>
         ))}
       </div>
+      <ServiceLegend />
       <div className="flex min-h-0 flex-1 gap-4 px-6 pb-6">
         <div id="calendar" data-date={day} className="min-h-0 flex-1 overflow-auto rounded-lg border border-stone-200 bg-white">
           <div className="sticky top-0 z-10 grid grid-cols-[56px_repeat(4,1fr)] border-b border-stone-200 bg-white">
@@ -226,7 +249,9 @@ function AppointmentBlock({ appointment: a, onClick }: { appointment: Appointmen
       data-no-shows={client.noShows}
       className={cn(
         "appointment absolute inset-x-1 flex flex-col overflow-hidden rounded-md border px-2 py-1 text-left",
-        off ? "border-stone-200 bg-stone-50 text-stone-400 line-through" : "border-violet-200 bg-violet-50 text-stone-800 hover:border-violet-400",
+        off
+          ? "border-stone-200 bg-stone-50 text-stone-400 line-through"
+          : cn("text-stone-800", SERVICE_COLOR[service.id]?.block ?? "border-violet-200 bg-violet-50 hover:border-violet-400"),
       )}
       style={{ top: (a.start - OPEN_MIN) * PX + 1, height: service.minutes * PX - 2 }}
     >
