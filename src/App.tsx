@@ -59,7 +59,7 @@ function Sidebar({ page, go }: { page: Page; go: (page: Page) => void }) {
   return (
     <aside id="sidebar" className="flex w-52 shrink-0 flex-col border-r border-stone-200 bg-white">
       <div className="flex h-14 items-center gap-2 px-4">
-        <img src="/icon.svg" alt="" className="h-7 w-7" />
+        <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" className="h-7 w-7" />
         <span className="text-[17px] font-bold tracking-tight text-stone-900">tidboka</span>
       </div>
       <nav className="flex flex-col gap-0.5 px-2 pt-2">
