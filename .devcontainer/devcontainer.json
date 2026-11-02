@@ -1,0 +1,6 @@
+{
+  "name": "demo app",
+  "image": "docker.io/library/node:22-slim",
+  "postStartCommand": "npm ci --no-audit --no-fund && npm run dev -- --host 0.0.0.0 --port 5173",
+  "forwardPorts": [5173]
+}
